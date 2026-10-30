@@ -1,0 +1,51 @@
+contracts:
+  - name: "Threadline prediction API health check"
+    unit: fashion-prediction-api
+    type: rest
+    stability: must_preserve
+    source_loc: "backend/server.py:316"
+    contract:
+      method: "GET"
+      path: "/health"
+      request: "No request body"
+      response: "JSON {status: \"ok\", model: \"FashionCLIP\", categories: 18}"
+      error: "Unknown paths return 404 JSON {error}"
+      auth: "No authentication; API is intended for local use"
+    target_contract:
+      method: "GET /health -> JSON {status, model, categories}"
+      notes: "Current implementation contract; count reflects 18 prompt categories."
+    semantic_divergence: []
+
+  - name: "Threadline image prediction"
+    unit: fashion-prediction-api
+    type: rest
+    stability: must_preserve
+    source_loc: "backend/server.py:330"
+    contract:
+      method: "POST"
+      path: "/predict"
+      request: "multipart/form-data with an image file part named image; JPG/JPEG, PNG, or WEBP; max 10 MiB"
+      response: "JSON {predicted_class: string, confidence: number in [0,1], top_predictions: up to four {label, confidence} objects}"
+      error: "400 empty upload; 403 disallowed Origin; 411 missing/invalid Content-Length; 413 oversized upload; 415 wrong request media type; 422 invalid/unreadable image or invalid image part; 500 prediction failure; 404 unknown path"
+      auth: "No authentication; CORS/origin check restricts browser calls to local HTTP origins with a port or null origin"
+    target_contract:
+      method: "POST /predict (multipart image) -> JSON {predicted_class, confidence, top_predictions}"
+      notes: "Scores 18 category prompts; returns the best category unless similarity or lead threshold is not met, in which case predicted_class is Other / unclear. confidence remains the best category's relative softmax score."
+    semantic_divergence: []
+
+  - name: "Browser-to-prediction API request"
+    unit: threadline-ui
+    type: rest
+    stability: must_preserve
+    source_loc: "frontend/app.js:212"
+    contract:
+      method: "POST"
+      path: "Configured by frontend/config.js; default http://127.0.0.1:5000/predict"
+      request: "FormData with field image; browser does not manually set Content-Type"
+      response: "Prediction API JSON; UI normalizes predicted_class/label/prediction/class_name and confidence aliases"
+      error: "Non-2xx JSON error is shown; unreadable response, invalid result, and network failure each produce an error state"
+      auth: "No credentials are sent"
+    target_contract:
+      method: "POST configured predictionUrl with FormData(image)"
+      notes: "Preserve UI support for API response validation and visible success/error states."
+    semantic_divergence: []

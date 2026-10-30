@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Discover clothing from the Threadline boutique." />
+    <meta name="theme-color" content="#fffaf7" />
+    <title>The Threadline Edit — Boutique shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./shop.css" />
+    <script src="./catalog.js" defer></script>
+    <script src="./shop.js" defer></script>
+  </head>
+  <body class="shop-page">
+    <div class="shop-announcement">A little boutique discovery, picked with care <span>✳</span> Fresh arrivals from your local shop</div>
+    <header class="shop-header">
+      <a class="shop-brand" href="./shop.html" aria-label="The Threadline Edit home">
+        <span class="brand">threadline<span class="brand-period">.</span></span>
+        <span class="shop-brand-subtitle">THE BOUTIQUE EDIT</span>
+      </a>
+      <nav class="shop-nav" aria-label="Shop navigation">
+        <a href="#new-arrivals">NEW ARRIVALS</a>
+        <a href="#shop-categories">CLOTHING</a>
+        <a href="#shop-categories">THE EDIT</a>
+      </nav>
+      <div class="shop-header-actions">
+        <label class="store-search">
+          <span class="visually-hidden">Search products</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.8" cy="8.8" r="5.5" /><path d="m13 13 4 4" /></svg>
+          <input id="product-search" type="search" placeholder="Search your next favourite" />
+        </label>
+        <button class="bag-button" id="bag-button" type="button" aria-label="Open shopping bag">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></svg>
+          <span>Bag</span><b id="bag-count">0</b>
+        </button>
+        <a class="founder-link" href="./index.html">Founder desk <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="shop-hero">
+        <div class="shop-hero-copy">
+          <span class="shop-eyebrow">A SMALL SHOP WITH A BIG SENSE OF STYLE</span>
+          <h1>Find your<br /><em>feel-good</em> fit.</h1>
+          <p>Thoughtful everyday pieces, handpicked for the way you really live.</p>
+          <a class="shop-hero-cta" href="#new-arrivals">Explore the collection <span aria-hidden="true">↓</span></a>
+          <span class="hero-edition">THE EVERYDAY EDIT&nbsp; · &nbsp;VOL. 01</span>
+        </div>
+        <div class="shop-hero-art" aria-label="Illustrated fashion collection">
+          <div class="hero-sun"></div>
+          <div class="hero-orbit"></div>
+          <div class="hero-fashion-shape shape-one"></div>
+          <div class="hero-fashion-shape shape-two"></div>
+          <div class="hero-fashion-shape shape-three"></div>
+          <span class="hero-art-label">MADE FOR YOUR EVERYDAY</span>
+          <span class="hero-art-index">01 / 03</span>
+          <span class="hero-art-note">A little colour<br />goes a long way.</span>
+        </div>
+      </section>
+
+      <section class="shop-promises" aria-label="Boutique values">
+        <span><i>✳</i> Curated for your everyday</span>
+        <span><i>◇</i> Small-shop, personal service</span>
+        <span><i>♡</i> New finds, added by your local boutique</span>
+      </section>
+
+      <section class="shop-collection" id="new-arrivals">
+        <div class="collection-heading">
+          <div>
+            <span class="shop-eyebrow">JUST ARRIVED AT THE BOUTIQUE</span>
+            <h2>New in, <em>just for you.</em></h2>
+            <p>Browse the pieces your local shop has added to its edit.</p>
+          </div>
+          <span class="collection-count" id="collection-count">0 PIECES</span>
+        </div>
+        <div class="category-filters" id="shop-categories" aria-label="Filter by category"></div>
+        <div class="product-grid" id="product-grid" aria-live="polite"></div>
+        <div class="shop-empty" id="shop-empty" hidden>
+          <span class="shop-empty-icon">✳</span>
+          <h3>Your next favourite is on its way.</h3>
+          <p>The boutique is preparing its collection. Check back after the founder adds new pieces.</p>
+          <a href="./index.html">Visit the founder desk <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="shop-no-results" id="shop-no-results" hidden>
+          <h3>No pieces found just yet.</h3>
+          <p>Try another search or category.</p>
+        </div>
+      </section>
+
+      <section class="shop-story">
+        <div class="story-mark">T.</div>
+        <div>
+          <span class="shop-eyebrow">A NOTE FROM YOUR BOUTIQUE</span>
+          <h2>Good clothes.<br /><em>Good people.</em></h2>
+          <p>We believe finding something you love should feel like chatting with someone who knows your style. This little shop is our handpicked edit—come say hello in person, too.</p>
+        </div>
+        <span class="story-side-note">LOCAL FINDS<br />PERSONAL TOUCH</span>
+      </section>
+    </main>
+
+    <footer class="shop-footer">
+      <a class="shop-brand" href="./shop.html">
+        <span class="brand">threadline<span class="brand-period">.</span></span>
+        <span class="shop-brand-subtitle">THE BOUTIQUE EDIT</span>
+      </a>
+      <span>Thoughtfully found. Locally loved.</span>
+      <a href="./index.html">Founder desk ↗</a>
+    </footer>
+
+    <div class="bag-backdrop" id="bag-backdrop" hidden></div>
+    <aside class="bag-drawer" id="bag-drawer" aria-labelledby="bag-title" aria-hidden="true">
+      <div class="bag-drawer-heading">
+        <div><span class="shop-eyebrow">YOUR LITTLE EDIT</span><h2 id="bag-title">Your bag <span id="bag-title-count">(0)</span></h2></div>
+        <button class="bag-close" id="bag-close" type="button" aria-label="Close shopping bag">×</button>
+      </div>
+      <div class="bag-items" id="bag-items"></div>
+      <div class="bag-empty" id="bag-empty">
+        <span>♡</span><strong>Your bag is taking a little break.</strong><p>Find a piece you love and add it here.</p>
+        <button type="button" id="continue-shopping">Keep exploring</button>
+      </div>
+      <div class="bag-summary" id="bag-summary" hidden>
+        <div><span>Items in your bag</span><strong id="bag-total-items">0</strong></div>
+        <p>This is a shopping preview. Contact the boutique directly to check availability and arrange a purchase.</p>
+        <a href="#new-arrivals">Continue browsing the collection ↓</a>
+        <span class="no-payment-note">No checkout or payment is collected here.</span>
+      </div>
+    </aside>
+    <div class="shop-toast" id="shop-toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

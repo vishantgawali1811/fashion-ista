@@ -1,0 +1,4 @@
+unit: train-fashion-mnist-inceptionv3
+bindings: []
+reason: "Directly invoked Python CLI using TensorFlow/Keras APIs; no dependency-injection or web-framework wiring."
+runtime_config: []

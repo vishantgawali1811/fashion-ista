@@ -1,0 +1,23 @@
+unit: train-fashion-mnist-resnet50
+side_effects:
+  - source_loc: "models/resnet50.py:43"
+    effect: "Loads Fashion-MNIST, trains a ResNet50 ImageNet transfer-learning head then fine-tunes, and writes model/evaluation artifacts under results/ResNet50/."
+    must_preserve: true
+branches:
+  - source_loc: "models/resnet50.py:63"
+    condition: "Initial training phase completes or is stopped by validation callbacks."
+    behavior: "Unfreeze only the final 20 base layers for fine-tuning; keep batch-normalization layers frozen and use a lower learning rate."
+    must_preserve: true
+  - source_loc: "common.py:340"
+    condition: "Validation loss/accuracy meets callback stopping/checkpoint conditions."
+    behavior: "Early-stop, reduce learning rate on plateau, and retain the best validation-accuracy checkpoint."
+    must_preserve: true
+error_paths:
+  - source_loc: "common.py:104"
+    trigger: "Dataset files are missing or fail shape/validation checks."
+    outcome: "Terminate with a specific exception before completing training."
+    contract: "CLI failure; do not report model success."
+    must_preserve: true
+concurrency:
+  model: sync
+  tx_boundary: null

@@ -1,0 +1,19 @@
+unit: test-fashion-mnist-dataset
+side_effects:
+  - source_loc: "test_dataset.py:14"
+    effect: "Loads the local training/validation/test tensors and prints their shapes, pixel value range, label IDs, and class-name mapping."
+    must_preserve: true
+branches:
+  - source_loc: "common.py:104"
+    condition: "Dataset files are missing or have invalid label/pixel columns or validation size."
+    behavior: "Raise a specific file or value error rather than printing a success message."
+    must_preserve: true
+error_paths:
+  - source_loc: "common.py:104"
+    trigger: "The expected local CSV input files are absent or invalid."
+    outcome: "Terminate with FileNotFoundError or ValueError."
+    contract: "CLI failure with an exception."
+    must_preserve: true
+concurrency:
+  model: sync
+  tx_boundary: null

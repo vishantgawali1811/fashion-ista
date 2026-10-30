@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Sort incoming clothing deliveries with image-powered category suggestions and a simple stock log."
+    />
+    <meta name="theme-color" content="#f7f7f4" />
+    <title>Threadline — Retail stock desk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./config.js" defer></script>
+    <script src="./catalog.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Threadline home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M9 7.5 16 4l7 3.5-2.2 5.2H11.2L9 7.5Z" />
+            <path d="m11.2 12.7-3.7 3.1 3.1 2.6v8.1h10.8v-8.1l3.1-2.6-3.7-3.1" />
+            <path d="M13 17h6" />
+          </svg>
+        </span>
+        <span>threadline<span class="brand-period">.</span></span>
+      </a>
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="./shop.html">Customer shop</a>
+        <a href="#analyzer">Receive stock</a>
+        <a href="#stock-log">Stock log</a>
+      </nav>
+      <a class="header-link" href="#stock-log">
+        Founder desk
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M4.5 10h11m-4.5-4.5L15.5 10 11 14.5" />
+        </svg>
+      </a>
+    </header>
+
+    <main>
+      <section class="hero shell">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> YOUR SHOP FLOOR, IN ORDER</div>
+          <h1>New stock in.<br /><span>Less sorting stress.</span></h1>
+          <p class="hero-description">
+            Photograph one item from a delivery, get a category suggestion, and
+            keep quantities and batches together in one simple receiving log.
+          </p>
+          <div class="hero-proof" aria-label="MVP information">
+            <span class="proof-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none">
+                <path d="m10 2 6.5 2.7v4.8c0 4.1-2.8 6.7-6.5 8.5-3.7-1.8-6.5-4.4-6.5-8.5V4.7L10 2Z" />
+                <path d="m7 9.8 2 2 4-4" />
+              </svg>
+            </span>
+            <span><strong>Image-assisted sorting</strong><span>Suggestions across 18 clothing categories</span></span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="retail-summary-card">
+            <span class="mini-label">RECEIVING DESK</span>
+            <span class="summary-card-icon" aria-hidden="true">↘</span>
+            <strong>One delivery,<br />one clear log.</strong>
+            <span class="summary-card-note">Classify · count · review</span>
+            <span class="summary-card-footer"><i></i> Ready when your stock arrives</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="overview shell" aria-label="Stock overview">
+        <article class="overview-card">
+          <span class="overview-icon">▦</span>
+          <span class="overview-label">UNITS RECEIVED TODAY</span>
+          <strong id="stat-units">0</strong>
+          <small>Pieces added to your stock log</small>
+        </article>
+        <article class="overview-card">
+          <span class="overview-icon icon-categories">◈</span>
+          <span class="overview-label">CATEGORIES SORTED TODAY</span>
+          <strong id="stat-categories">0</strong>
+          <small>Different product types logged</small>
+        </article>
+        <article class="overview-card">
+          <span class="overview-icon icon-review">◎</span>
+          <span class="overview-label">NEEDS A QUICK CHECK</span>
+          <strong id="stat-review">0</strong>
+          <small>Low-confidence suggestions</small>
+        </article>
+        <article class="overview-card overview-note">
+          <span class="overview-label">LIVE ON YOUR CUSTOMER SHOP</span>
+          <strong id="stat-live-products">0</strong>
+          <small>In-stock product listings are ready for customers to browse.</small>
+        </article>
+      </section>
+
+      <section class="analyzer shell" id="analyzer" aria-labelledby="analyzer-title">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow section-eyebrow"><span class="eyebrow-dot"></span> NEW DELIVERY</div>
+            <h2 id="analyzer-title">Receive and sort stock</h2>
+            <p>Analyze one product photo, confirm the suggestion, then record how many arrived.</p>
+          </div>
+          <div class="step-indicator" aria-label="Three simple steps">
+            <span class="step-active">01</span><span class="step-divider"></span><span>03</span>
+            <span class="step-label">PHOTO <span>›</span> SUGGESTION <span>›</span> LOG</span>
+          </div>
+        </div>
+
+        <div class="workspace">
+          <div class="upload-panel">
+            <div class="entry-fields">
+              <div class="field-group">
+                <label class="field-label" for="product-name">Product name</label>
+                <input id="product-name" class="text-field" type="text" maxlength="70" placeholder="e.g. Everyday cotton kurti" />
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="product-price">Selling price <span>Optional · ₹</span></label>
+                <input id="product-price" class="text-field" type="number" min="0" max="10000000" step="1" placeholder="e.g. 799" inputmode="decimal" />
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="product-variant">Color / size <span>Optional</span></label>
+                <input id="product-variant" class="text-field" type="text" maxlength="50" placeholder="e.g. Indigo · M" />
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="slot-reference">Delivery / slot reference <span>Optional</span></label>
+                <input id="slot-reference" class="text-field" type="text" maxlength="60" placeholder="e.g. Friday delivery · Lot 04" />
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="unit-count">Number of pieces</label>
+                <input id="unit-count" class="text-field" type="number" min="1" max="9999" step="1" value="1" inputmode="numeric" />
+              </div>
+            </div>
+            <label class="dropzone" id="dropzone" for="image-input" tabindex="0">
+              <input
+                id="image-input"
+                class="visually-hidden"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                aria-describedby="upload-hint"
+              />
+              <span class="upload-icon" aria-hidden="true">
+                <svg viewBox="0 0 28 28" fill="none">
+                  <path d="M14 18V4m0 0L8.5 9.5M14 4l5.5 5.5" />
+                  <path d="M5 17v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5" />
+                </svg>
+              </span>
+              <span class="drop-title">Add a photo of one item</span>
+              <span class="drop-subtitle">or <span class="browse-link">browse files</span> from your device</span>
+              <span class="upload-specs" id="upload-hint">JPG, PNG or WEBP <i></i> Max 10 MB</span>
+              <span class="drop-preview" id="drop-preview" hidden>
+                <img id="preview-image" alt="Selected clothing item preview" />
+              </span>
+              <span class="selected-file" id="selected-file" hidden></span>
+            </label>
+            <div class="upload-footer">
+              <span class="privacy-note">
+                <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                  <rect x="3.5" y="7.5" width="11" height="8" rx="2" />
+                  <path d="M6 7.5V5a3 3 0 1 1 6 0v2.5m-3 3v2" />
+                </svg>
+                Photo appears in the customer shop on this device.
+              </span>
+              <button class="clear-button" id="clear-button" type="button" hidden>Remove image</button>
+            </div>
+            <div class="form-message" id="form-message" role="status" aria-live="polite"></div>
+            <button class="analyze-button" id="analyze-button" type="button" disabled>
+              <span class="button-spinner" aria-hidden="true"></span>
+              <span class="button-label">Suggest a category</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M4 10h11m-4.5-4.5L15 10l-4.5 4.5" />
+              </svg>
+            </button>
+            <p class="model-note">Set a product name and optional price to feature it in your shop.</p>
+          </div>
+
+          <aside class="result-panel" id="result-panel" aria-live="polite">
+            <div class="result-topline">
+              <span class="result-kicker">CATEGORY SUGGESTION</span>
+              <span class="result-status" id="result-status"><i></i> WAITING FOR IMAGE</span>
+            </div>
+            <div class="result-empty" id="result-empty">
+              <div class="empty-illustration" aria-hidden="true">
+                <span class="empty-ring ring-outer"></span>
+                <span class="empty-ring ring-inner"></span>
+                <svg viewBox="0 0 72 72" fill="none">
+                  <rect x="14" y="12" width="44" height="48" rx="6" />
+                  <path d="M23 27h26M23 36h18M23 45h22" />
+                  <circle cx="49" cy="48" r="8" />
+                  <path d="m55 54 5 5" />
+                </svg>
+              </div>
+              <h3>Your next item<br />starts here.</h3>
+              <p>Upload a clear product photo to see a category suggestion and match score.</p>
+            </div>
+            <div class="result-content" id="result-content" hidden>
+              <div class="prediction-label">SUGGESTED CATEGORY</div>
+              <h3 class="prediction-name" id="prediction-name">—</h3>
+              <label class="category-confirm-label" for="product-category">Product category <span>Check or edit the suggestion</span></label>
+              <input class="text-field category-confirm-field" id="product-category" type="text" maxlength="60" placeholder="e.g. Shirts & tops" />
+              <div class="confidence-row">
+                <span>Relative match score</span>
+                <strong id="confidence-value">—</strong>
+              </div>
+              <div class="confidence-track"><span id="confidence-bar"></span></div>
+              <div class="alternatives-heading">OTHER POSSIBLE MATCHES</div>
+              <div class="alternatives" id="alternatives"></div>
+              <p class="result-disclaimer">Check the suggestion before adding it to your stock log.</p>
+              <button class="analyze-button add-stock-button" id="add-stock-button" type="button" disabled>
+                Add to stock log
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4.5-4.5L15 10l-4.5 4.5" /></svg>
+              </button>
+            </div>
+            <div class="result-error" id="result-error" hidden>
+              <span class="error-icon" aria-hidden="true">!</span>
+              <h3>We couldn’t complete the analysis.</h3>
+              <p id="error-text"></p>
+              <button class="try-again-button" id="try-again-button" type="button">Try again</button>
+            </div>
+            <div class="result-footnote">
+              <span class="tiny-sparkle">✳</span>
+              <span>AI-assisted sorting. Your judgement comes first.</span>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="stock-section shell" id="stock-log" aria-labelledby="stock-title">
+        <div class="section-heading stock-heading">
+          <div>
+            <div class="eyebrow section-eyebrow"><span class="eyebrow-dot"></span> YOUR RECEIVING RECORD</div>
+            <h2 id="stock-title">Stock log</h2>
+            <p>Keep track of the pieces sorted through this browser.</p>
+          </div>
+          <label class="search-field">
+            <span class="visually-hidden">Search stock log</span>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.8" cy="8.8" r="5.5" /><path d="m13 13 4 4" /></svg>
+            <input id="stock-search" type="search" placeholder="Search category or delivery" />
+          </label>
+        </div>
+        <p class="storage-notice" id="storage-notice" role="status" aria-live="polite">Stock log is saved in this browser on this device.</p>
+        <div class="stock-table-wrap">
+          <table class="stock-table">
+            <thead>
+              <tr>
+                <th scope="col">PRODUCT</th>
+                <th scope="col">DELIVERY / SLOT</th>
+                <th scope="col">PIECES</th>
+                <th scope="col">SELLING PRICE</th>
+                <th scope="col">MODEL MATCH</th>
+                <th scope="col">STATUS</th>
+                <th scope="col"><span class="visually-hidden">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="stock-rows"></tbody>
+          </table>
+          <div class="stock-empty" id="stock-empty">
+            <span class="empty-box-icon" aria-hidden="true">▤</span>
+            <strong>Your stock log is ready</strong>
+            <p>Once you classify and add an item, it will show up here with its quantity and delivery reference.</p>
+            <a href="#analyzer">Receive your first item <span aria-hidden="true">↑</span></a>
+          </div>
+          <p class="no-search-results" id="no-search-results" hidden>No matching stock entries. Try a different search.</p>
+        </div>
+        <p class="stock-footnote">This MVP saves item records in local browser storage only. It does not sync between devices or replace a point-of-sale inventory system.</p>
+      </section>
+
+      <section class="how-section shell" id="how-it-works">
+        <div class="how-heading">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> SIMPLE BY DESIGN</div>
+          <h2>A good read, in three little steps.</h2>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card">
+            <span class="step-number">01</span>
+            <span class="step-icon step-icon-upload" aria-hidden="true">
+              <svg viewBox="0 0 28 28" fill="none"><path d="M14 18V4m0 0L8.5 9.5M14 4l5.5 5.5M5 17v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5" /></svg>
+            </span>
+            <h3>Bring your image</h3>
+            <p>Choose a clear photo of the single fashion item you’d like to identify.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">02</span>
+            <span class="step-icon step-icon-scan" aria-hidden="true">
+              <svg viewBox="0 0 28 28" fill="none"><circle cx="12.5" cy="12.5" r="7.5" /><path d="m18 18 5 5m-10.5-14v7m-3.5-3.5h7" /></svg>
+            </span>
+            <h3>Let the model take a look</h3>
+            <p>A fashion-trained model compares the image against multiple clothing descriptions.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">03</span>
+            <span class="step-icon step-icon-result" aria-hidden="true">
+              <svg viewBox="0 0 28 28" fill="none"><path d="m5 15 6 6L23 8" /><path d="M5 5h7M5 9h4" /></svg>
+            </span>
+            <h3>Get your style signal</h3>
+            <p>See the closest category, its relative match score and other possible matches.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="recognition-section shell" id="recognition">
+        <div class="recognition-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> THE MODEL’S STYLE VOCABULARY</div>
+          <h2>More pieces.<br /><span>Clearer categories.</span></h2>
+          <p>
+            FashionCLIP compares your image with multiple fashion-specific
+            descriptions, including socks and different types of shoes. Images
+            that do not clearly fit get marked “Other / unclear”.
+          </p>
+        </div>
+        <div class="category-board" aria-label="Fashion categories">
+          <span><i>01</i> Socks</span>
+          <span><i>02</i> Sneakers</span>
+          <span><i>03</i> Sandals</span>
+          <span><i>04</i> Boots</span>
+          <span><i>05</i> Formal shoes</span>
+          <span><i>06</i> T-shirt / top</span>
+          <span><i>07</i> Shirt / blouse</span>
+          <span><i>08</i> Sweater / pullover</span>
+          <span><i>09</i> Coat / jacket</span>
+          <span><i>10</i> Dress</span>
+          <span><i>11</i> Skirt</span>
+          <span><i>12</i> Trousers</span>
+          <span><i>13</i> Shorts</span>
+          <span><i>14</i> Leggings</span>
+          <span><i>15</i> Bag</span>
+          <span><i>16</i> Hat / cap</span>
+          <span><i>17</i> Scarf</span>
+          <span><i>18</i> Other clothing</span>
+          <span><i>—</i> Other / unclear</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner shell">
+        <a class="brand footer-brand" href="#" aria-label="Threadline home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M9 7.5 16 4l7 3.5-2.2 5.2H11.2L9 7.5Z" />
+              <path d="m11.2 12.7-3.7 3.1 3.1 2.6v8.1h10.8v-8.1l3.1-2.6-3.7-3.1" />
+              <path d="M13 17h6" />
+            </svg>
+          </span>
+          <span>threadline<span class="brand-period">.</span></span>
+        </a>
+        <span class="footer-copy">A clearer way to receive every thread.</span>
+        <a class="back-top" href="#">Back to top ↑</a>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+unit: fashion-prediction-api
+side_effects:
+  - source_loc: "backend/server.py:127"
+    effect: "Loads FashionCLIP model and processor at process import/startup, computes text category prototypes, and logs the selected device/model."
+    must_preserve: true
+  - source_loc: "backend/server.py:286"
+    effect: "Logs HTTP client requests to stdout."
+    must_preserve: false
+  - source_loc: "backend/server.py:369"
+    effect: "Logs prediction exceptions to stdout and returns a generic model-error response."
+    must_preserve: true
+branches:
+  - source_loc: "backend/server.py:316"
+    condition: "GET path is /health."
+    behavior: "Return JSON status, model identifier, and category count; other paths return 404 JSON."
+    must_preserve: true
+  - source_loc: "backend/server.py:330"
+    condition: "POST path is /predict."
+    behavior: "Reject unknown paths; for /predict enforce local origin, multipart form content type, and valid positive Content-Length."
+    must_preserve: true
+  - source_loc: "backend/server.py:352"
+    condition: "Request body exceeds the limit or decoded image bytes exceed 10 MiB."
+    behavior: "Return 413 with an upload-size error."
+    must_preserve: true
+  - source_loc: "backend/server.py:233"
+    condition: "Best similarity is below 0.22 or its lead over second place is below 0.025."
+    behavior: "Return predicted_class Other / unclear while retaining the best category's relative score and ranked candidates."
+    must_preserve: true
+error_paths:
+  - source_loc: "backend/server.py:339"
+    trigger: "Origin not allowed, request is not multipart, content length absent/invalid, or upload is empty/oversized."
+    outcome: "Return 403, 415, 411, 400, or 413 respectively as JSON."
+    contract: "HTTP status with {error: string} JSON."
+    must_preserve: true
+  - source_loc: "backend/server.py:364"
+    trigger: "Image part missing/empty, disallowed declared type, undecodable bytes, unsupported image format, or excessive image dimensions."
+    outcome: "Return 422 JSON {error: string}."
+    contract: "HTTP 422 for image/input validation failures."
+    must_preserve: true
+  - source_loc: "backend/server.py:369"
+    trigger: "Unexpected failure during preprocessing or model inference."
+    outcome: "Log exception and return a generic retry-oriented message."
+    contract: "HTTP 500 JSON {error: string}."
+    must_preserve: true
+concurrency:
+  model: thread-pool
+  tx_boundary: null

@@ -1,0 +1,4 @@
+unit: test-fashion-mnist-dataset
+bindings: []
+reason: "Directly invoked Python smoke-test script; no framework wiring."
+runtime_config: []

@@ -1,0 +1,23 @@
+unit: train-fashion-mnist-cnn
+side_effects:
+  - source_loc: "models/cnn.py:81"
+    effect: "Loads local Fashion-MNIST data, trains a ten-class CNN, saves best/final Keras models, training history/plots, and test evaluation outputs under results/CNN/."
+    must_preserve: true
+branches:
+  - source_loc: "common.py:104"
+    condition: "CSV files are missing, pixel columns are not 784, or validation_size is not smaller than training record count."
+    behavior: "Raise FileNotFoundError or ValueError rather than proceeding with malformed data."
+    must_preserve: true
+  - source_loc: "common.py:340"
+    condition: "Validation loss/accuracy meets Keras callback stopping/checkpoint conditions."
+    behavior: "Early-stop on validation loss, reduce learning rate on plateau, and retain best validation-accuracy checkpoint."
+    must_preserve: true
+error_paths:
+  - source_loc: "common.py:104"
+    trigger: "Dataset files are absent or invalid."
+    outcome: "Training terminates with a specific file/shape/validation error."
+    contract: "CLI failure with exception; no successful-looking artifacts should be assumed."
+    must_preserve: true
+concurrency:
+  model: sync
+  tx_boundary: null

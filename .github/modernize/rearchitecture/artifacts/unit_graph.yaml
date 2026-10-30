@@ -1,0 +1,127 @@
+units:
+  - name: threadline-ui
+    trigger: page
+    trigger_detail: "Static browser page at frontend/index.html; user selects/drops an image and requests a prediction."
+    source_anchors:
+      - path: frontend/index.html
+        line: 1
+      - path: frontend/app.js
+        line: 1
+      - path: frontend/config.js
+        line: 1
+      - path: frontend/styles.css
+        line: 1
+    exported_signature: []
+    dynamic_entrypoints: []
+    depends_on:
+      - unit: fashion-prediction-api
+        via: "POST /predict (multipart/form-data, image file part)"
+    shared_refs: []
+
+  - name: fashion-prediction-api
+    trigger: api
+    trigger_detail: "Threaded local HTTP API: GET /health and POST /predict."
+    source_anchors:
+      - path: backend/server.py
+        line: 276
+    exported_signature:
+      - method: "GET /health -> JSON {status, model, categories}"
+        source_loc: "backend/server.py:316"
+        stability: must_preserve
+      - method: "POST /predict (multipart image) -> JSON {predicted_class, confidence, top_predictions}"
+        source_loc: "backend/server.py:330"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs: []
+
+  - name: train-fashion-mnist-cnn
+    trigger: cli
+    trigger_detail: "Run `python models/cnn.py` to train and evaluate a 28×28 Fashion-MNIST CNN."
+    source_anchors:
+      - path: models/cnn.py
+        line: 81
+    exported_signature: []
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: common-training-utilities
+        used_fields: [load_fashion_mnist, make_augmentation, compile_model, get_callbacks, save_model_summary, plot_training_history, evaluate_model, RESULTS_DIR]
+
+  - name: train-fashion-mnist-vgg16
+    trigger: cli
+    trigger_detail: "Run `python models/vgg16.py` to train and evaluate a VGG16 transfer-learning classifier."
+    source_anchors:
+      - path: models/vgg16.py
+        line: 96
+    exported_signature: []
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: common-training-utilities
+        used_fields: [load_fashion_mnist, make_augmentation, compile_model, get_callbacks, save_model_summary, evaluate_model]
+
+  - name: train-fashion-mnist-resnet50
+    trigger: cli
+    trigger_detail: "Run `python models/resnet50.py` to train and evaluate a ResNet50 transfer-learning classifier."
+    source_anchors:
+      - path: models/resnet50.py
+        line: 43
+    exported_signature: []
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: common-training-utilities
+        used_fields: [load_fashion_mnist, make_augmentation, compile_model, get_callbacks, save_model_summary, plot_training_history, evaluate_model, RESULTS_DIR]
+
+  - name: train-fashion-mnist-mobilenetv2
+    trigger: cli
+    trigger_detail: "Run `python models/mobilenetv2.py` to train and evaluate a MobileNetV2 transfer-learning classifier."
+    source_anchors:
+      - path: models/mobilenetv2.py
+        line: 43
+    exported_signature: []
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: common-training-utilities
+        used_fields: [load_fashion_mnist, make_augmentation, compile_model, get_callbacks, save_model_summary, plot_training_history, evaluate_model, RESULTS_DIR]
+
+  - name: train-fashion-mnist-inceptionv3
+    trigger: cli
+    trigger_detail: "Run `python models/inceptionv3.py` to train and evaluate an InceptionV3 transfer-learning classifier."
+    source_anchors:
+      - path: models/inceptionv3.py
+        line: 43
+    exported_signature: []
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: common-training-utilities
+        used_fields: [load_fashion_mnist, make_augmentation, compile_model, get_callbacks, save_model_summary, plot_training_history, evaluate_model, RESULTS_DIR]
+
+  - name: train-fashion-mnist-efficientnetb0
+    trigger: cli
+    trigger_detail: "Run `python models/efficientnetb0.py` to train and evaluate an EfficientNetB0 transfer-learning classifier."
+    source_anchors:
+      - path: models/efficientnetb0.py
+        line: 43
+    exported_signature: []
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: common-training-utilities
+        used_fields: [load_fashion_mnist, make_augmentation, compile_model, get_callbacks, save_model_summary, plot_training_history, evaluate_model, RESULTS_DIR]
+
+  - name: test-fashion-mnist-dataset
+    trigger: cli
+    trigger_detail: "Run `python test_dataset.py` to check local dataset loading, shapes, pixel range, and labels."
+    source_anchors:
+      - path: test_dataset.py
+        line: 1
+    exported_signature: []
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: common-training-utilities
+        used_fields: [load_fashion_mnist, CLASS_NAMES]

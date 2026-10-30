@@ -1,0 +1,34 @@
+unit: threadline-ui
+side_effects:
+  - source_loc: "frontend/app.js:212"
+    effect: "Sends the selected image to predictionUrl as multipart field image."
+    must_preserve: true
+  - source_loc: "frontend/app.js:102"
+    effect: "Creates a local object URL to preview the selected image; revokes the prior URL when replacing/clearing it."
+    must_preserve: true
+branches:
+  - source_loc: "frontend/app.js:89"
+    condition: "Selected file MIME type is not JPEG, PNG, or WEBP."
+    behavior: "Reject the selection and display an image-format message."
+    must_preserve: true
+  - source_loc: "frontend/app.js:94"
+    condition: "Selected file size exceeds 10 MiB."
+    behavior: "Reject the selection and display a smaller-file message."
+    must_preserve: true
+  - source_loc: "frontend/app.js:225"
+    condition: "Prediction response is non-2xx, invalid JSON, or invalid prediction shape/score."
+    behavior: "Show an error result; a network TypeError asks the user to check backend availability and allowed origin."
+    must_preserve: true
+  - source_loc: "frontend/app.js:191"
+    condition: "No image has been selected or predictionUrl is missing."
+    behavior: "Do not send the request; show a message or API configuration error."
+    must_preserve: true
+error_paths:
+  - source_loc: "frontend/app.js:230"
+    trigger: "Fetch fails, server returns non-2xx, response JSON is unreadable, or response validation fails."
+    outcome: "Display the error panel and a Try again action; restore button/input state after request completion."
+    contract: "User-visible error state; no prediction result is rendered."
+    must_preserve: true
+concurrency:
+  model: async
+  tx_boundary: null

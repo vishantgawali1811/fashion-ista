@@ -1,0 +1,10 @@
+unit: threadline-ui
+bindings: []
+reason: "Static HTML and browser JavaScript; no frontend framework, DI container, or framework route registry."
+runtime_config:
+  - key: "THREADLINE_CONFIG.predictionUrl"
+    source_loc: "frontend/config.js:1"
+    source: code
+    default_value: "http://127.0.0.1:5000/predict"
+    must_appear_in_target: true
+    notes: "Browser POST destination for prediction requests."

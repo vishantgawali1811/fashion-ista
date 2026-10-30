@@ -1,0 +1,33 @@
+unit: fashion-prediction-api
+bindings:
+  - type: route-declaration
+    name: "GET /health"
+    source_loc: "backend/server.py:316"
+    target: "PredictionHandler.do_GET"
+    must_appear_in_target: true
+    notes: "Python standard-library HTTP handler dispatches path /health."
+  - type: route-declaration
+    name: "POST /predict"
+    source_loc: "backend/server.py:330"
+    target: "PredictionHandler.do_POST"
+    must_appear_in_target: true
+    notes: "Consumes multipart form data with a file part named image."
+  - type: route-declaration
+    name: "OPTIONS preflight"
+    source_loc: "backend/server.py:311"
+    target: "PredictionHandler.do_OPTIONS"
+    must_appear_in_target: true
+    notes: "Responds 204 and emits CORS headers only for local frontend origins."
+runtime_config:
+  - key: "THREADLINE_API_HOST"
+    source_loc: "backend/server.py:379"
+    source: env
+    default_value: "127.0.0.1"
+    must_appear_in_target: true
+    notes: "HTTP bind host."
+  - key: "THREADLINE_API_PORT"
+    source_loc: "backend/server.py:380"
+    source: env
+    default_value: "5000"
+    must_appear_in_target: true
+    notes: "HTTP bind port."

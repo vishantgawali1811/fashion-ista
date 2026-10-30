@@ -1,0 +1,41 @@
+modules:
+  - name: common-training-utilities
+    kind: utility
+    source_loc: "common.py:104"
+    used_by_units:
+      - train-fashion-mnist-cnn
+      - train-fashion-mnist-vgg16
+      - train-fashion-mnist-resnet50
+      - train-fashion-mnist-mobilenetv2
+      - train-fashion-mnist-inceptionv3
+      - train-fashion-mnist-efficientnetb0
+      - test-fashion-mnist-dataset
+    fields:
+      - name: load_fashion_mnist
+        type: "function: CSV dataset loading, validation split, normalization, reshape"
+      - name: make_augmentation
+        type: "function: TensorFlow augmentation pipeline"
+      - name: compile_model
+        type: "function: Keras compile helper"
+      - name: get_callbacks
+        type: "function: early stopping, learning-rate reduction, best-model checkpoint"
+      - name: save_model_summary
+        type: "function: writes Keras model summary"
+      - name: plot_training_history
+        type: "function: writes training metric plots and history"
+      - name: evaluate_model
+        type: "function: test evaluation metrics and reports"
+      - name: RESULTS_DIR
+        type: "str: results output root"
+      - name: CLASS_NAMES
+        type: "list[str]: Fashion-MNIST label mapping"
+      - name: NUM_CLASSES
+        type: "int: 10 Fashion-MNIST labels"
+      - name: TRAIN_FILE
+        type: "str: training CSV path"
+      - name: TEST_FILE
+        type: "str: test CSV path"
+    god_class: false
+    split_candidate: false
+    migration_strategy: copy
+    notes: "Shared dataset, callbacks, and evaluation helpers consumed by all training scripts and the dataset smoke script."
